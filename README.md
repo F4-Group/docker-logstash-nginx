@@ -23,7 +23,7 @@ also configure your /etc/nginx/nginx.conf file with
                      '"http_referrer": "$http_referer", '
                      '"http_user_agent": "$http_user_agent" } }';
     access_log /var/log/nginx/access.log logstash_json;
-    error_log /var/log/nginx/error.log logstash_json;
+    error_log /var/log/nginx/error.log;
 
 to send nginx logs to logstash
 
