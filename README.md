@@ -1,12 +1,21 @@
 # Logstash
 
-based on cactusbone/logstash
+This repository contains **Dockerfile** for [Logstash](http://logstash.net/).
 
-configured to accept gelf input and output to elasticsearch
-port 9200 must be exported using -p so browsers can access it
-expect /var/log on the host to be binded using data volume on /var/host_logs
+It is configured with :
 
-also configure your /etc/nginx/nginx.conf file with
+* input: gelf, log4j, nginx logfile
+* output: elasticsearch
+
+Expect /var/log on the host to be binded using data volume on /var/host_logs
+
+### Dependencies
+
+* [cactusbone/logstash](https://index.docker.io/u/cactusbone/logstash/)
+
+### Configuration
+
+Configure your /etc/nginx/nginx.conf file to send nginx logs to logstash :
 
     ##
     # Logging Settings
@@ -25,15 +34,14 @@ also configure your /etc/nginx/nginx.conf file with
     access_log /var/log/nginx/access.log logstash_json;
     error_log /var/log/nginx/error.log;
 
-to send nginx logs to logstash
-
-be careful, since port 12201 is using udp, you cannot use the svendowideit/ambassador image in front.
-
-Ports
+### Exposed ports
 
 * 12201/udp (gelf udp input)
 * 9200 (embedded elasticsearch)
+* 9500 (log4j server)
 
-run it using
+Be careful, since port 12201 is using udp, you cannot use the svendowideit/ambassador image in front.
+
+### Usage
 
     docker run -d -p 12201:12201/udp -p 9201:9200 -v /var/logs:/var/host_logs:ro cactusbone/logstash-nginx
